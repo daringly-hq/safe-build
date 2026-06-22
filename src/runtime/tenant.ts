@@ -19,7 +19,7 @@ export interface OwnedResource<TAdmin> {
   readonly admin: TAdmin;
   readonly resourceId: string;
   readonly userId: string;
-  readonly __ownerVerified: "safe-build-kit";
+  readonly __ownerVerified: "safe-build";
 }
 
 export interface RequireOwnedResourceOptions<TAdmin> {
@@ -46,7 +46,7 @@ export async function requireOwnedResource<TAdmin>({
     admin,
     resourceId,
     userId,
-    __ownerVerified: "safe-build-kit",
+    __ownerVerified: "safe-build",
   };
 }
 

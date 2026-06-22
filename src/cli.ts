@@ -23,7 +23,7 @@ async function main(argv: string[]): Promise<void> {
     dryRun: args.dryRun,
   });
 
-  console.log(`Daringly Safe Build Kit (${result.profile}) -> ${result.targetDir}`);
+  console.log(`safe-build (${result.profile}) -> ${result.targetDir}`);
   for (const file of result.files) {
     console.log(`${file.action.padEnd(15)} ${file.path}`);
   }
@@ -86,11 +86,11 @@ function requireValue(values: string[], index: number, flag: string): string {
 
 function printHelp(): void {
   console.log(`Usage:
-  daringly-safe-build init [--profile generic|daringly] [--target .] [--force] [--dry-run]
+  safe-build init [--profile generic|strict] [--target .] [--force] [--dry-run]
 
 Profiles:
-  generic   Next.js/Supabase-style apps outside Daringly
-  daringly  Daringly-owned apps with stricter tenant and copy guardrails`);
+  generic   Broad Next.js/Supabase guardrails for fast-built apps
+  strict    More production-focused checks and a bigger handoff list`);
 }
 
 main(process.argv.slice(2)).catch((error: unknown) => {

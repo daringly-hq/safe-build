@@ -1,14 +1,14 @@
 {
-  "name": "daringly-safe-build",
+  "name": "safe-build",
   "version": "0.1.0",
-  "description": "Drop-in security scaffold for Daringly and generic Next.js/Supabase apps.",
+  "description": "Drop-in security scaffold for AI-built Next.js and Supabase apps.",
   "type": "module",
   "license": "MIT",
-  "author": "Daringly",
+  "author": "Safe Build contributors",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "bin": {
-    "daringly-safe-build": "./bin/daringly-safe-build.mjs"
+    "safe-build": "./bin/safe-build.mjs"
   },
   "exports": {
     ".": "./src/index.ts",
@@ -27,12 +27,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/daringly-hq/daringly-safe-build.git"
+    "url": "git+https://github.com/daringly-hq/safe-build.git"
   },
   "bugs": {
-    "url": "https://github.com/daringly-hq/daringly-safe-build/issues"
+    "url": "https://github.com/daringly-hq/safe-build/issues"
   },
-  "homepage": "https://github.com/daringly-hq/daringly-safe-build#readme",
+  "homepage": "https://github.com/daringly-hq/safe-build#readme",
   "keywords": [
     "ai",
     "appsec",
@@ -51,7 +51,7 @@
     "tsx": "^4.22.4"
   },
   "devDependencies": {
-    "@types/node": "22.10.2",
+    "@types/node": "^22.12.0",
     "typescript": "5.6.3",
     "vitest": "^4.1.9"
   }

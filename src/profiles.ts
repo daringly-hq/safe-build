@@ -1,6 +1,6 @@
 import { templates } from "./templates";
 
-export const profiles = ["generic", "daringly"] as const;
+export const profiles = ["generic", "strict"] as const;
 export type SafeBuildProfile = (typeof profiles)[number];
 
 export interface TemplateFile {

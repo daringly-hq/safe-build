@@ -16,7 +16,7 @@ afterEach(async () => {
 });
 
 describe("scaffoldSafeBuildKit", () => {
-  it("scaffolds the generic profile without Daringly-specific lint hooks", async () => {
+  it("scaffolds the generic profile with the base security gate", async () => {
     const targetDir = await tempDir();
     const result = await scaffoldSafeBuildKit({ targetDir, profile: "generic" });
 
@@ -35,23 +35,23 @@ describe("scaffoldSafeBuildKit", () => {
     );
     const route = await readFile(path.join(targetDir, "lib/security/safe-route.ts"), "utf8");
     expect(workflow).toContain("gitleaks/gitleaks-action");
-    expect(workflow).not.toContain("lint:ownership");
+    expect(workflow).toContain("semgrep scan --config p/owasp-top-ten --config p/typescript");
     expect(route).toContain("safeRoute");
-    expect(route).not.toContain("daringlyRoute");
+    expect(route).toContain("PublicError");
   });
 
-  it("scaffolds the Daringly profile with stricter repo guardrails", async () => {
+  it("scaffolds the strict profile with stricter docs and scan config", async () => {
     const targetDir = await tempDir();
-    await scaffoldSafeBuildKit({ targetDir, profile: "daringly" });
+    await scaffoldSafeBuildKit({ targetDir, profile: "strict" });
 
     const workflow = await readFile(
       path.join(targetDir, ".github/workflows/security-gate.yml"),
       "utf8",
     );
     const doc = await readFile(path.join(targetDir, "docs/security/safe-build-gate.md"), "utf8");
-    expect(workflow).toContain("pnpm lint:ownership");
-    expect(workflow).toContain("pnpm lint:no-founder-paperclip");
-    expect(doc).toContain("Founder-facing copy must be plain language.");
+    expect(workflow).toContain("--config p/secrets");
+    expect(doc).toContain("This app uses the `safe-build` strict profile.");
+    expect(doc).toContain("What The Agent Must Handle");
   });
 
   it("does not overwrite existing files unless forced", async () => {
@@ -75,7 +75,7 @@ describe("scaffoldSafeBuildKit", () => {
 
   it("supports dry runs without writing files", async () => {
     const targetDir = await tempDir();
-    const result = await scaffoldSafeBuildKit({ targetDir, profile: "daringly", dryRun: true });
+    const result = await scaffoldSafeBuildKit({ targetDir, profile: "strict", dryRun: true });
 
     expect(result.files.every((file) => file.action === "would-create")).toBe(true);
     await expect(
@@ -85,7 +85,7 @@ describe("scaffoldSafeBuildKit", () => {
 });
 
 async function tempDir(): Promise<string> {
-  const dir = await mkdtemp(path.join(os.tmpdir(), "safe-build-kit-"));
+  const dir = await mkdtemp(path.join(os.tmpdir(), "safe-build-"));
   tempDirs.push(dir);
   return dir;
 }
