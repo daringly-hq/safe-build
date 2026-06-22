@@ -326,6 +326,37 @@ jobs:
           cmd_options: "-a"
 `;
 
+const checklistCoverage = [
+  "## Checklist Coverage",
+  "",
+  "- Covered directly: secret scanning, dependency audit, static code scan, safe public errors, preview scan wiring.",
+  "- Scaffolded for the agent: server-side auth, authorization on every sensitive action, input validation, tenant isolation, safe logging.",
+  "- Agent must implement: rate limits, email verification, session expiry, roles, CORS/CSRF, PII retention/deletion, audit logs, retries, idempotency, circuit breakers, cache invalidation, accessibility, disaster recovery, and compliance review.",
+  "",
+];
+
+const staticChecklistCoverage = [
+  "## Checklist Coverage",
+  "",
+  "- Covered directly: secret scanning, static content scan, preview scan wiring.",
+  "- Agent must implement: hosting security headers, HTTPS/TLS settings, third-party script review, form abuse limits, accessibility, disaster recovery, and compliance review.",
+  "",
+];
+
+const agentResourcePack = [
+  "## Agent Resource Pack",
+  "",
+  "- OWASP ASVS: https://owasp.org/www-project-application-security-verification-standard/",
+  "- OWASP Cheat Sheet Series: https://cheatsheetseries.owasp.org/",
+  "- OWASP Input Validation: https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html",
+  "- OWASP Authentication: https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
+  "- OWASP Session Management: https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html",
+  "- OWASP REST Security: https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html",
+  "- OWASP API Security Top 10: https://owasp.org/API-Security/editions/2023/en/0x11-t10/",
+  "- NIST SSDF: https://csrc.nist.gov/projects/ssdf",
+  "",
+];
+
 const genericDoc = [
   "# Safe Build Gate",
   "",
@@ -353,6 +384,8 @@ const genericDoc = [
   "- Add LLM prompt-injection tests if the app calls models or agents.",
   "- Set production security headers, cookies, CORS, CSRF, logging, and rollback.",
   "",
+  ...checklistCoverage,
+  ...agentResourcePack,
 ].join("\n");
 
 const strictDoc = [
@@ -388,6 +421,8 @@ const strictDoc = [
   "- Rollback, logging, alerting, and incident response.",
   "- Legal or compliance claims such as SOC 2, HIPAA, PCI, GDPR, or safe/secure marketing copy.",
   "",
+  ...checklistCoverage,
+  ...agentResourcePack,
 ].join("\n");
 
 const staticDoc = [
@@ -414,6 +449,8 @@ const staticDoc = [
   "- Review any CMS, form backend, or API endpoint connected to the static site.",
   "- Run a preview scan after deploy by setting `PREVIEW_URL` in GitHub Actions.",
   "",
+  ...staticChecklistCoverage,
+  ...agentResourcePack,
 ].join("\n");
 
 const tenantExample = String.raw`import { describe, expect, test } from "vitest";
