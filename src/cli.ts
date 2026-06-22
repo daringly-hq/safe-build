@@ -86,11 +86,12 @@ function requireValue(values: string[], index: number, flag: string): string {
 
 function printHelp(): void {
   console.log(`Usage:
-  safe-build init [--profile generic|strict] [--target .] [--force] [--dry-run]
+  safe-build init [--profile generic|strict|static] [--target .] [--force] [--dry-run]
 
 Profiles:
   generic   Broad Next.js/Supabase guardrails for fast-built apps
-  strict    More production-focused checks and a bigger handoff list`);
+  strict    More production-focused checks and a bigger handoff list
+  static    Secret/static/deploy checks for static sites without app routes`);
 }
 
 main(process.argv.slice(2)).catch((error: unknown) => {

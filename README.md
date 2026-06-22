@@ -28,6 +28,12 @@ actions, or production traffic:
 npx safe-build init --profile strict --target .
 ```
 
+Use the static profile for simple sites without app routes or databases:
+
+```bash
+npx safe-build init --profile static --target .
+```
+
 The CLI does not overwrite existing files unless you pass `--force`.
 
 ```bash
@@ -39,6 +45,8 @@ npx safe-build init --profile strict --target . --force
 - `generic` — broad Next.js / Supabase guardrails for fast-built apps.
 - `strict` — the same base files plus stricter docs and CI notes for production
   apps.
+- `static` — secret scanning, static analysis, and preview scanning for static
+  sites without Next.js routes or Supabase tables.
 
 ## What It Adds
 
@@ -50,6 +58,9 @@ npx safe-build init --profile strict --target . --force
 - `docs/security/safe-build-gate.md` — what the gate covers and how to use it.
 - `tests/security/tenant-isolation.example.ts` — starter tests for cross-user
   data isolation.
+
+The `static` profile adds only the workflow and docs, because route wrappers and
+tenant helpers do not apply to static sites.
 
 ## Coverage Summary
 
@@ -65,6 +76,8 @@ generically to many AI-built apps:
 - Abuse resistance: provide a clear place to add auth, rate limits, and bot
   checks.
 - Preview testing: optionally scan a live preview URL before production.
+- Static sites: run secret/static/deploy checks without adding irrelevant app
+  route files.
 - AI app handoff: document what the coding agent must review when a generic
   scaffold cannot know the app's rules.
 

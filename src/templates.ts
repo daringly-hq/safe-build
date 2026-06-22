@@ -283,6 +283,49 @@ jobs:
           cmd_options: "-a"
 `;
 
+const staticWorkflow = String.raw`name: Safe Build Gate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  secrets:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+
+  static-analysis:
+    name: Static content scan
+    runs-on: ubuntu-latest
+    container:
+      image: semgrep/semgrep:latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: semgrep scan --config p/secrets --config p/javascript --error
+
+  preview-scan:
+    name: Live preview scan
+    runs-on: ubuntu-latest
+    if: vars.PREVIEW_URL != ''
+    steps:
+      - uses: zaproxy/action-baseline@v0.14.0
+        with:
+          target: ${githubPreviewUrl}
+          fail_action: true
+          cmd_options: "-a"
+`;
+
 const genericDoc = [
   "# Safe Build Gate",
   "",
@@ -344,6 +387,32 @@ const strictDoc = [
   "- Environment variables, key rotation, and production secret storage.",
   "- Rollback, logging, alerting, and incident response.",
   "- Legal or compliance claims such as SOC 2, HIPAA, PCI, GDPR, or safe/secure marketing copy.",
+  "",
+].join("\n");
+
+const staticDoc = [
+  "# Safe Build Gate",
+  "",
+  "This site uses the `safe-build` static profile.",
+  "",
+  "This profile is for static sites and simple render pipelines. It does not add",
+  "Next.js route wrappers or Supabase tenant helpers.",
+  "",
+  "## What The Gate Covers",
+  "",
+  "- Secret scanning with Gitleaks.",
+  "- Static content and JavaScript scans with Semgrep.",
+  "- Optional OWASP ZAP scan against a preview URL.",
+  "- A clear handoff list for checks that need project context.",
+  "",
+  "## What The Agent Must Handle",
+  "",
+  "- Add a dependency audit if this site later gains dependencies and a lockfile.",
+  "- Verify forms, embeds, analytics, and third-party scripts.",
+  "- Set production security headers, redirects, and cache rules with the host.",
+  "- Keep `.env`, local build output, and generated artifacts out of git.",
+  "- Review any CMS, form backend, or API endpoint connected to the static site.",
+  "- Run a preview scan after deploy by setting `PREVIEW_URL` in GitHub Actions.",
   "",
 ].join("\n");
 
@@ -417,6 +486,11 @@ export const templates: TemplateFile[] = [
     profiles: ["strict"],
   },
   {
+    path: ".github/workflows/security-gate.yml",
+    content: staticWorkflow,
+    profiles: ["static"],
+  },
+  {
     path: "docs/security/safe-build-gate.md",
     content: genericDoc,
     profiles: ["generic"],
@@ -425,6 +499,11 @@ export const templates: TemplateFile[] = [
     path: "docs/security/safe-build-gate.md",
     content: strictDoc,
     profiles: ["strict"],
+  },
+  {
+    path: "docs/security/safe-build-gate.md",
+    content: staticDoc,
+    profiles: ["static"],
   },
   {
     path: "tests/security/tenant-isolation.example.ts",

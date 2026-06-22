@@ -54,6 +54,28 @@ describe("scaffoldSafeBuildKit", () => {
     expect(doc).toContain("What The Agent Must Handle");
   });
 
+  it("scaffolds the static profile without app-route files", async () => {
+    const targetDir = await tempDir();
+    const result = await scaffoldSafeBuildKit({ targetDir, profile: "static" });
+
+    expect(result.profile).toBe("static");
+    expect(result.files.map((file) => file.path)).toEqual([
+      ".github/workflows/security-gate.yml",
+      "docs/security/safe-build-gate.md",
+    ]);
+
+    const workflow = await readFile(
+      path.join(targetDir, ".github/workflows/security-gate.yml"),
+      "utf8",
+    );
+    const doc = await readFile(path.join(targetDir, "docs/security/safe-build-gate.md"), "utf8");
+    expect(workflow).toContain("Static content scan");
+    expect(doc).toContain("This site uses the `safe-build` static profile.");
+    await expect(readFile(path.join(targetDir, "lib/security/safe-route.ts"), "utf8")).rejects.toThrow(
+      /ENOENT/,
+    );
+  });
+
   it("does not overwrite existing files unless forced", async () => {
     const targetDir = await tempDir();
     const routePath = path.join(targetDir, "lib/security/safe-route.ts");
