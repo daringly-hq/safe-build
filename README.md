@@ -55,7 +55,8 @@ npx safe-build init --profile strict --target . --force
 - `lib/security/tenant.ts` — ownership proof before admin database access.
 - `.github/workflows/security-gate.yml` — secret scanning, Semgrep checks,
   dependency audit, and optional OWASP ZAP preview scan.
-- `docs/security/safe-build-gate.md` — what the gate covers and how to use it.
+- `docs/security/safe-build-gate.md` — what the gate covers, the full
+  best-practices matrix, and resources for agents to use.
 - `tests/security/tenant-isolation.example.ts` — starter tests for cross-user
   data isolation.
 
@@ -144,17 +145,85 @@ README tells the coding agent to handle these items:
 
 ## Agent Resource Pack
 
-When `safe-build` says "agent task," the agent should use these as starting
-points:
+When `safe-build` says "agent task," the generated best-practices doc tells
+the agent what to inspect, what to implement, and what references to use.
 
-- [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/) for a full application-security checklist.
-- [OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org/) for practical implementation guidance.
-- [OWASP Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html) for untrusted inputs.
-- [OWASP Authentication Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html) for server-side auth decisions.
-- [OWASP Session Management Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html) for session lifetime and token handling.
-- [OWASP REST Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html) for HTTPS, API behavior, and transport safety.
-- [OWASP API Security Top 10](https://owasp.org/API-Security/editions/2023/en/0x11-t10/) for API authentication, authorization, and abuse risks.
-- [NIST SSDF](https://csrc.nist.gov/projects/ssdf) for secure software development process guidance.
+The installed doc covers:
+
+- App risk classification and when to use the strict profile.
+- Input validation, injection prevention, and safe database access.
+- Server-side authentication, email verification, MFA, sessions, and cookies.
+- Authorization on every action, role checks, and tenant isolation.
+- Supabase RLS, service-role boundaries, and cross-user data tests.
+- Secret handling, key rotation, public env vars, and frontend API-key review.
+- Rate limits, bot checks, contact-form abuse, signup abuse, and AI cost abuse.
+- HTTPS, HSTS, CSP, CORS, CSRF, secure headers, and host-level settings.
+- PII minimization, retention, export/delete flows, and safe logging.
+- Audit trails, request IDs, alerting, incident response, and rollback.
+- Webhooks, OAuth callbacks, payment flows, signatures, replay protection, and
+  idempotency.
+- Retry backoff, circuit breakers, provider fallback behavior, and graceful
+  errors.
+- Concurrency, race-condition prevention, database constraints, and cache
+  invalidation.
+- File uploads, private storage, signed URLs, malware checks, and size/type
+  limits.
+- Dependency scanning, GitHub Actions hardening, code scanning, and supply-chain
+  review.
+- Preview scanning, E2E/regression tests, coverage thresholds, load testing, and
+  resilience tests.
+- AI/LLM prompt-injection tests, tool-permission checks, output validation, PII
+  leaks, and model cost controls.
+- Accessibility, WCAG checks, keyboard flows, and screen-reader review.
+- Backups, RTO/RPO, disaster recovery, restore tests, architecture diagrams, and
+  ADRs.
+- Compliance guardrails: no GDPR, HIPAA, PCI, SOC 2, or "secure" claims without
+  the right legal/security review.
+
+Primary resources included in the generated doc:
+
+- [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/)
+- [OWASP Web Security Testing Guide](https://owasp.org/www-project-web-security-testing-guide/)
+- [OWASP API Security Top 10](https://owasp.org/API-Security/editions/2023/en/0x11-t10/)
+- [OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org/)
+- [OWASP Email Validation and Verification](https://cheatsheetseries.owasp.org/cheatsheets/Email_Validation_and_Verification_Cheat_Sheet.html)
+- [OWASP Multifactor Authentication](https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html)
+- [OWASP Secure Code Review](https://cheatsheetseries.owasp.org/cheatsheets/Secure_Code_Review_Cheat_Sheet.html)
+- [OWASP Software Supply Chain Security](https://cheatsheetseries.owasp.org/cheatsheets/Software_Supply_Chain_Security_Cheat_Sheet.html)
+- [OWASP Vulnerable Dependency Management](https://cheatsheetseries.owasp.org/cheatsheets/Vulnerable_Dependency_Management_Cheat_Sheet.html)
+- [OWASP Bot Management and Anti-Automation](https://cheatsheetseries.owasp.org/cheatsheets/Bot_Management_and_Anti-Automation_Cheat_Sheet.html)
+- [OWASP Third Party JavaScript Management](https://cheatsheetseries.owasp.org/cheatsheets/Third_Party_Javascript_Management_Cheat_Sheet.html)
+- [NIST SSDF](https://csrc.nist.gov/projects/ssdf)
+- [NIST Cybersecurity Framework](https://www.nist.gov/cyberframework)
+- [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
+- [Supabase RLS docs](https://supabase.com/docs/guides/database/postgres/row-level-security)
+- [Supabase auth rate limits](https://supabase.com/docs/guides/auth/rate-limits)
+- [Next.js security headers](https://nextjs.org/docs/app/api-reference/config/next-config-js/headers)
+- [Next.js CSP guide](https://nextjs.org/docs/app/guides/content-security-policy)
+- [Next.js caching](https://nextjs.org/docs/app/building-your-application/caching)
+- [MDN Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)
+- [MDN HSTS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security)
+- [MDN Idempotency-Key](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Idempotency-Key)
+- [MDN Web Security](https://developer.mozilla.org/en-US/docs/Web/Security)
+- [GitHub code scanning](https://docs.github.com/en/code-security/concepts/code-scanning/code-scanning)
+- [GitHub secret scanning](https://docs.github.com/en/code-security/concepts/secret-security/secret-scanning)
+- [GitHub Actions secure use](https://docs.github.com/en/actions/reference/security/secure-use)
+- [OWASP GitHub Actions Security](https://cheatsheetseries.owasp.org/cheatsheets/GitHub_Actions_Security_Cheat_Sheet.html)
+- [Gitleaks action](https://github.com/gitleaks/gitleaks-action)
+- [Semgrep quickstart](https://docs.semgrep.dev/getting-started/quickstart)
+- [OWASP ZAP baseline action](https://github.com/zaproxy/action-baseline)
+- [OSV-Scanner](https://github.com/google/osv-scanner)
+- [Arcjet docs](https://docs.arcjet.com/)
+- [Stripe webhooks](https://docs.stripe.com/webhooks)
+- [Stripe idempotent requests](https://docs.stripe.com/api/idempotent_requests)
+- [Microsoft Circuit Breaker pattern](https://learn.microsoft.com/en-us/azure/architecture/patterns/circuit-breaker)
+- [Microsoft Retry pattern](https://learn.microsoft.com/en-us/azure/architecture/patterns/retry)
+- [k6 docs](https://grafana.com/docs/k6/latest/)
+- [OWASP LLM Top 10](https://owasp.org/www-project-top-10-for-large-language-model-applications/)
+- [OWASP LLM Prompt Injection Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html)
+- [Promptfoo red teaming](https://www.promptfoo.dev/docs/red-team/)
+- [WCAG](https://www.w3.org/WAI/standards-guidelines/wcag/)
+- [Playwright accessibility testing](https://playwright.dev/docs/accessibility-testing)
 
 ## Local Development
 
